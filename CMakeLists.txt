@@ -94,19 +94,18 @@ elseif(UNIX)
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         # we cannot mix sanitizers with Valgrind
     elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-        if("${CMAKE_CXX_COMPILER_VERSION}" MATCHES "14.")
-            # check leaks on Linux since macOS does not support the leaks sanitizer yet
-            # leaks sanitizer is enabled by default on Linux, so we do not need to enable it explicitly
+        # Change the regex to match version 14 or any higher version (15, 16, 17, 18...)
+        if("${CMAKE_CXX_COMPILER_VERSION}" MATCHES "^(1[4-9]|[2-9][0-9])\\.")
+            # Works for Clang 14, 15, 16, 17, 18+
             target_compile_options(${PROJECT_NAME} PRIVATE "$<${debug_mode}:-fsanitize=address,undefined>")
             target_link_options(${PROJECT_NAME} PRIVATE "$<${debug_mode}:-fsanitize=address,undefined>")
         elseif("${CMAKE_CXX_COMPILER_VERSION}" MATCHES "13.")
-            # use semi-colons instead of spaces to separate arguments
-            # it is recommended to quote generator expressions in order to avoid unintentional splitting
             target_compile_options(${PROJECT_NAME} PRIVATE "$<${debug_mode}:-fsanitize=memory,undefined;-fsanitize-recover=memory,undefined;-fsanitize-memory-track-origins>")
             target_link_options(${PROJECT_NAME} PRIVATE "$<${debug_mode}:-fsanitize=memory,undefined;-fsanitize-recover=memory,undefined;-fsanitize-memory-track-origins;-Wl,-rpath,tools/llvm-project/build/lib>")
         else()
-            message("No matching Clang version to add sanitizer flags!")
+            message("No matching Clang version to add sanitizer flags! Found: ${CMAKE_CXX_COMPILER_VERSION}")
         endif()
+    endif()
     endif()
 endif()
 

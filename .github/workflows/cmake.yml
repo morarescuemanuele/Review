@@ -87,7 +87,9 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build valgrind cppcheck jq
+          # Install libc++ which Clang needs to find <iostream>
+          sudo apt-get install -y ninja-build valgrind cppcheck jq \
+                                 libc++-18-dev libc++abi-18-dev
 
       - name: Cache MinGW
         if: runner.os == 'Windows' && matrix.cxx == 'g++'
