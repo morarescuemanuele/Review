@@ -16,7 +16,7 @@ else()
 endif()
 
 # Main executable
-add_executable(${PROJECT_NAME} main.cpp, src/database.cpp, src/exceptions.cpp, src/library.cpp, src/sysman.cpp, src/user.cpp, include/database.h, include/exceptions.h, include/library.h, include/sysman.h, include/user.h)
+add_executable(${PROJECT_NAME} main.cpp src/database.cpp src/exceptions.cpp src/library.cpp src/sysman.cpp src/user.cpp include/database.h include/exceptions.h include/library.h include/sysman.h include/user.h)
 
 if(GITHUB_ACTIONS)
     message("NOTE: GITHUB_ACTIONS defined")
